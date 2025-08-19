@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     unoptimized: true
   },
   basePath: process.env.NODE_ENV === 'production' ? '/anthana-landing' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/anthana-landing' : '',
 };
 
 export default nextConfig;

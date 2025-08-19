@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -8,6 +9,9 @@ interface LogoProps {
 }
 
 export default function Logo({ size = 'md', showText = true, className = '' }: LogoProps) {
+  const router = useRouter()
+  const basePath = router.basePath || ''
+  
   const sizeClasses = {
     sm: 'h-6 w-6',
     md: 'h-8 w-8', 
@@ -27,7 +31,7 @@ export default function Logo({ size = 'md', showText = true, className = '' }: L
       {/* Logo SVG */}
       <div className={`relative ${sizeClasses[size]} shrink-0`}>
         <Image
-          src="/logos/anthana-logo.svg"
+          src={`${basePath}/logos/anthana-logo.svg`}
           alt="Anthana Logo"
           fill
           sizes={`${size === 'sm' ? '24px' : size === 'md' ? '32px' : '48px'}`}

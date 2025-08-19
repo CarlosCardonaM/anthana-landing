@@ -1,7 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useState, useRef, useEffect } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
+import { useRouter } from 'next/router'
 
 interface TeamMember {
   name: string
@@ -11,59 +12,44 @@ interface TeamMember {
   position: 'left' | 'center' | 'right'
 }
 
-const teamMembers: TeamMember[] = [
-  {
-    name: 'Victor Gallo',
-    role: 'Estratega de Marketing Digital',
-    description: 'Especialista en estrategias de crecimiento y optimización de campañas. Con más de 8 años de experiencia en marketing digital, Victor ha ayudado a más de 200 empresas a escalar sus operaciones y maximizar su ROI.',
-    image: '/team/victor-gallo.jpg',
-    position: 'left'
-  },
-  {
-    name: 'Carlos Cardona',
-    role: 'CEO & Director de Tecnología',
-    description: 'Líder visionario con pasión por la innovación tecnológica. Carlos combina experiencia en desarrollo de software, IA y marketing digital para crear soluciones únicas que transforman negocios.',
-    image: '/team/carlos-cardona.jpg',
-    position: 'center'
-  },
-  {
-    name: 'Jose Cardona',
-    role: 'Director Creativo & Diseño',
-    description: 'Artista digital y estratega creativo con un ojo excepcional para el diseño. Jose transforma ideas en experiencias visuales impactantes que conectan emocionalmente con las audiencias.',
-    image: '/team/jose-cardona.jpg',
-    position: 'right'
-  }
-]
-
 export default function TeamSection() {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const router = useRouter()
+  const basePath = router.basePath || ''
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+  const team = [
+    {
+      name: 'Victor Gallo',
+      role: 'Estratega de Marketing Digital',
+      description: 'Especialista en estrategias de crecimiento y optimización de campañas. Con más de 8 años de experiencia en marketing digital, Victor ha ayudado a más de 200 empresas a escalar sus operaciones y maximizar su ROI.',
+      position: 'left' as const,
+      image: `${basePath}/team/victor-gallo.jpg`
+    },
+    {
+      name: 'Carlos Cardona',
+      role: 'CEO & Director de Tecnología',
+      description: 'Líder visionario con pasión por la innovación tecnológica. Carlos combina experiencia en desarrollo de software, IA y marketing digital para crear soluciones únicas que transforman negocios.',
+      position: 'center' as const,
+      image: `${basePath}/team/carlos-cardona.jpg`
+    },
+    {
+      name: 'Jose Cardona',
+      role: 'Director Creativo & Diseño',
+      description: 'Artista digital y estratega creativo con un ojo excepcional para el diseño. Jose transforma ideas en experiencias visuales impactantes que conectan emocionalmente con las audiencias.',
+      position: 'right' as const,
+      image: `${basePath}/team/jose-cardona.jpg`
     }
-
-    return () => observer.disconnect()
-  }, [])
+  ]
 
   return (
-    <section ref={sectionRef} className="py-20 bg-gradient-to-br from-[#00A3E0]/5 via-transparent to-[#00A3E0]/5">
+    <section ref={ref} className="py-20 bg-gradient-to-br from-[#00A3E0]/5 via-transparent to-[#00A3E0]/5">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -76,7 +62,7 @@ export default function TeamSection() {
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {teamMembers.map((member, index) => (
+          {team.map((member, index) => (
             <motion.div
               key={member.name}
               className={`text-center group ${
@@ -84,7 +70,7 @@ export default function TeamSection() {
                 member.position === 'left' ? 'md:order-1' : 'md:order-3'
               }`}
               initial={{ opacity: 0, y: 30 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ 
                 duration: 0.6, 
                 delay: index * 0.2,
@@ -130,7 +116,7 @@ export default function TeamSection() {
                 <motion.div 
                   className="flex items-center justify-center gap-2"
                   initial={{ opacity: 0 }}
-                  animate={isVisible ? { opacity: 1 } : {}}
+                  animate={isInView ? { opacity: 1 } : {}}
                   transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
                 >
                   <h3 
@@ -146,7 +132,7 @@ export default function TeamSection() {
                     <motion.div 
                       className="w-6 h-6 bg-gradient-to-br from-[#00A3E0] to-[#00A3E0]/80 rounded-full flex items-center justify-center shadow-lg"
                       initial={{ scale: 0, rotate: -180 }}
-                      animate={isVisible ? { scale: 1, rotate: 0 } : {}}
+                      animate={isInView ? { scale: 1, rotate: 0 } : {}}
                       transition={{ duration: 0.6, delay: 1.2 }}
                     >
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -160,7 +146,7 @@ export default function TeamSection() {
                 <motion.p 
                   className="text-[#00A3E0] font-medium text-sm"
                   initial={{ opacity: 0 }}
-                  animate={isVisible ? { opacity: 1 } : {}}
+                  animate={isInView ? { opacity: 1 } : {}}
                   transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
                 >
                   {member.role}
@@ -170,7 +156,7 @@ export default function TeamSection() {
                 <motion.p 
                   className="text-white/70 text-sm leading-relaxed max-w-xs mx-auto"
                   initial={{ opacity: 0 }}
-                  animate={isVisible ? { opacity: 1 } : {}}
+                  animate={isInView ? { opacity: 1 } : {}}
                   transition={{ duration: 0.6, delay: index * 0.2 + 0.5 }}
                 >
                   {member.description}
@@ -184,7 +170,7 @@ export default function TeamSection() {
         <motion.div 
           className="text-center mt-16"
           initial={{ opacity: 0, y: 20 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 1.4 }}
         >
           <p className="text-white/60 text-sm mb-4">
