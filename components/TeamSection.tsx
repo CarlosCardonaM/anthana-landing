@@ -100,48 +100,61 @@ export default function TeamSection() {
                   
                   {/* Contenedor de la imagen */}
                   <div className="relative w-full h-full bg-gradient-to-br from-[#00A3E0]/20 to-[#00A3E0]/10 rounded-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                    {/* Placeholder de imagen */}
-                    <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
-                      <span className="text-white/40 text-sm">Foto de {member.name}</span>
-                    </div>
-                    
-                    {/* Imagen real (se mostrará cuando agregues las fotos) */}
-                    {/* <img 
+                    {/* Imagen real */}
+                    <img 
                       src={member.image} 
                       alt={member.name}
                       className="w-full h-full object-cover"
-                    /> */}
+                      onError={(e) => {
+                        // Si la imagen falla, mostrar placeholder
+                        const target = e.target as HTMLImageElement
+                        target.style.display = 'none'
+                        const placeholder = target.nextElementSibling as HTMLElement
+                        if (placeholder) placeholder.style.display = 'flex'
+                      }}
+                    />
+                    
+                    {/* Placeholder de imagen (oculto por defecto) */}
+                    <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center hidden">
+                      <span className="text-white/40 text-sm">Foto de {member.name}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Indicador de posición especial para Carlos */}
-                {member.position === 'center' && (
-                  <motion.div 
-                    className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-[#00A3E0] to-[#00A3E0]/80 rounded-full flex items-center justify-center shadow-lg"
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={isVisible ? { scale: 1, rotate: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 1.2 }}
-                  >
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                  </motion.div>
-                )}
+
               </div>
 
               {/* Información del miembro */}
               <div className="space-y-3">
                 {/* Nombre */}
-                <motion.h3 
-                  className={`text-xl font-bold text-white ${
-                    member.position === 'center' ? 'text-[#00A3E0]' : ''
-                  }`}
+                <motion.div 
+                  className="flex items-center justify-center gap-2"
                   initial={{ opacity: 0 }}
                   animate={isVisible ? { opacity: 1 } : {}}
                   transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
                 >
-                  {member.name}
-                </motion.h3>
+                  <h3 
+                    className={`text-xl font-bold text-white ${
+                      member.position === 'center' ? 'text-[#00A3E0]' : ''
+                    }`}
+                  >
+                    {member.name}
+                  </h3>
+                  
+                  {/* Check azul para Carlos */}
+                  {member.position === 'center' && (
+                    <motion.div 
+                      className="w-6 h-6 bg-gradient-to-br from-[#00A3E0] to-[#00A3E0]/80 rounded-full flex items-center justify-center shadow-lg"
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={isVisible ? { scale: 1, rotate: 0 } : {}}
+                      transition={{ duration: 0.6, delay: 1.2 }}
+                    >
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </motion.div>
+                  )}
+                </motion.div>
 
                 {/* Rol */}
                 <motion.p 
