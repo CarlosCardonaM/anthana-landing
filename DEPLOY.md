@@ -1,68 +1,40 @@
-# 🚀 Deploy a GitHub Pages
+# Deploy a GitHub Pages
 
-## 📋 Pasos para Deploy Automático
+## Configuración del Repositorio
 
-### 1. **Configurar GitHub Pages en tu repositorio:**
-- Ve a tu repositorio en GitHub
-- Click en **Settings** → **Pages**
-- En **Source**, selecciona **Deploy from a branch**
-- Selecciona la rama **gh-pages** (se creará automáticamente)
-- Click en **Save**
+1. **Crear un repositorio en GitHub** llamado `anthana-landing`
+2. **Hacer push del código** a la rama `main`
+3. **Configurar GitHub Pages**:
+   - Ve a Settings > Pages
+   - Source: Deploy from a branch
+   - Branch: `gh-pages` (se creará automáticamente)
+   - Folder: `/ (root)`
 
-### 2. **Configurar GitHub Actions:**
-- El workflow ya está configurado en `.github/workflows/deploy.yml`
-- Se ejecutará automáticamente en cada push a `main`
-- Construirá y desplegará tu sitio automáticamente
+## Workflow Automático
 
-### 3. **Hacer Commit y Push:**
+El proyecto incluye un workflow de GitHub Actions que:
+- Se ejecuta automáticamente en cada push a `main`
+- Construye el proyecto con `npm run build`
+- Hace deploy a la rama `gh-pages`
+
+## Configuración Local
+
+Para probar el build localmente:
+
 ```bash
-git add .
-git commit -m "Configure GitHub Pages deployment"
-git push origin main
+npm run build
 ```
 
-### 4. **Verificar el Deploy:**
-- Ve a **Actions** en tu repositorio
-- Verifica que el workflow se ejecute correctamente
-- Espera unos minutos para que se active GitHub Pages
+El sitio se generará en la carpeta `out/`
 
-## 🔧 Configuración del Sitio
+## Notas Importantes
 
-### **Base Path:**
-- El sitio está configurado para funcionar en `/anthanaai-site`
-- Si cambias el nombre del repositorio, actualiza `next.config.js`
+- El sitio se exporta como HTML estático
+- Las imágenes se configuran como `unoptimized: true` para compatibilidad
+- Se incluye `basePath: '/anthana-landing'` para el deploy en GitHub Pages
+- El archivo `.nojekyll` evita que GitHub Pages procese el sitio con Jekyll
 
-### **Archivos Importantes:**
-- `next.config.js` - Configuración de Next.js
-- `.github/workflows/deploy.yml` - Workflow de deploy
-- `public/.nojekyll` - Evita procesamiento con Jekyll
+## URL del Sitio
 
-## 🌐 URL del Sitio
-
-Una vez desplegado, tu sitio estará disponible en:
-```
-https://[tu-usuario].github.io/anthanaai-site/
-```
-
-## 🚨 Solución de Problemas
-
-### **Si el sitio no se muestra:**
-1. Verifica que GitHub Pages esté activado
-2. Revisa los logs en **Actions**
-3. Espera 5-10 minutos para la activación
-4. Verifica que la rama `gh-pages` se haya creado
-
-### **Si las imágenes no se cargan:**
-1. Verifica que las rutas en `next.config.js` sean correctas
-2. Asegúrate de que las imágenes estén en `public/`
-3. Verifica que el `basePath` coincida con el nombre del repositorio
-
-## 📱 Personalización
-
-### **Dominio Personalizado:**
-Si tienes un dominio, agrégalo en:
-1. `next.config.js` (basePath)
-2. `.github/workflows/deploy.yml` (cname)
-3. Configuración de DNS de tu proveedor
-
-¡Tu landing page estará disponible en GitHub Pages en pocos minutos! 🎉
+Una vez desplegado, el sitio estará disponible en:
+`https://[tu-usuario].github.io/anthana-landing/`
