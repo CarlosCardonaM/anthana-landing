@@ -4,14 +4,6 @@ import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { useRouter } from 'next/router'
 
-interface TeamMember {
-  name: string
-  role: string
-  description: string
-  image: string
-  position: 'left' | 'center' | 'right'
-}
-
 export default function TeamSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
@@ -24,21 +16,24 @@ export default function TeamSection() {
       role: 'Estratega de Marketing Digital',
       description: 'Especialista en estrategias de crecimiento y optimización de campañas. Con más de 8 años de experiencia en marketing digital, Victor ha ayudado a más de 200 empresas a escalar sus operaciones y maximizar su ROI.',
       position: 'left' as const,
-      image: `${basePath}/team/victor-gallo.jpg`
+      image: null, // Placeholder hasta tener la foto
+      hasImage: false
     },
     {
       name: 'Carlos Cardona',
       role: 'CEO & Director de Tecnología',
       description: 'Líder visionario con pasión por la innovación tecnológica. Carlos combina experiencia en desarrollo de software, IA y marketing digital para crear soluciones únicas que transforman negocios.',
       position: 'center' as const,
-      image: `${basePath}/team/carlos-cardona.jpg`
+      image: `${basePath}/team/carlos-cardona.JPG`,
+      hasImage: true
     },
     {
       name: 'Jose Cardona',
       role: 'Director Creativo & Diseño',
       description: 'Artista digital y estratega creativo con un ojo excepcional para el diseño. Jose transforma ideas en experiencias visuales impactantes que conectan emocionalmente con las audiencias.',
       position: 'right' as const,
-      image: `${basePath}/team/jose-cardona.jpg`
+      image: null, // Placeholder hasta tener la foto
+      hasImage: false
     }
   ]
 
@@ -52,9 +47,7 @@ export default function TeamSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Nuestro Equipo
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Nuestro Equipo</h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
             Conoce a los expertos que hacen posible la transformación digital de tu negocio
           </p>
@@ -66,48 +59,48 @@ export default function TeamSection() {
             <motion.div
               key={member.name}
               className={`text-center group ${
-                member.position === 'center' ? 'md:order-2' : 
-                member.position === 'left' ? 'md:order-1' : 'md:order-3'
+                member.position === 'left' ? 'md:order-1' : 
+                member.position === 'center' ? 'md:order-2' : 'md:order-3'
               }`}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ 
                 duration: 0.6, 
-                delay: index * 0.2,
-                ease: "easeOut"
+                delay: index * 0.2 
               }}
             >
-              {/* Foto del equipo */}
+              {/* Foto del miembro */}
               <div className="relative mb-6">
-                {/* Frame circular con gradiente */}
-                <div className="relative w-48 h-48 mx-auto">
-                  {/* Borde luminoso */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00A3E0] via-[#00A3E0]/80 to-[#00A3E0]/60 rounded-full p-1 group-hover:p-2 transition-all duration-300" />
-                  
-                  {/* Contenedor de la imagen */}
-                  <div className="relative w-full h-full bg-gradient-to-br from-[#00A3E0]/20 to-[#00A3E0]/10 rounded-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                    {/* Imagen real */}
-                    <img 
-                      src={member.image} 
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // Si la imagen falla, mostrar placeholder
-                        const target = e.target as HTMLImageElement
-                        target.style.display = 'none'
-                        const placeholder = target.nextElementSibling as HTMLElement
-                        if (placeholder) placeholder.style.display = 'flex'
-                      }}
-                    />
-                    
-                    {/* Placeholder de imagen (oculto por defecto) */}
-                    <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center hidden">
-                      <span className="text-white/40 text-sm">Foto de {member.name}</span>
+                <div className={`relative w-48 h-48 mx-auto ${
+                  member.hasImage ? '' : 'bg-gradient-to-br from-[#00A3E0]/20 to-[#00A3E0]/10 rounded-full flex items-center justify-center'
+                }`}>
+                  {member.hasImage ? (
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00A3E0] via-[#00A3E0]/80 to-[#00A3E0]/60 rounded-full p-1 group-hover:p-2 transition-all duration-300"></div>
+                      <div className="relative w-full h-full bg-gradient-to-br from-[#00A3E0]/20 to-[#00A3E0]/10 rounded-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                        <img 
+                          src={member.image!} 
+                          alt={member.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Si la imagen falla, mostrar placeholder
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            const placeholder = target.nextElementSibling as HTMLElement
+                            if (placeholder) placeholder.style.display = 'flex'
+                          }}
+                        />
+                        <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center hidden">
+                          <span className="text-white/40 text-sm">Foto de {member.name}</span>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-4xl opacity-60">👤</span>
                     </div>
-                  </div>
+                  )}
                 </div>
-
-
               </div>
 
               {/* Información del miembro */}
