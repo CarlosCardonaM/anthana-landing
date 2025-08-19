@@ -1,6 +1,7 @@
 export interface ToolItem { 
   name: string; 
-  icon: string 
+  icon?: string;
+  logoSrc?: string; // Ruta al archivo SVG en public/logos/
 }
 
 /**
@@ -16,11 +17,19 @@ export default function ToolsMarquee({ tools }: { tools: ToolItem[] }) {
       
       <div className="flex gap-10 animate-marquee will-change-transform">
         {items.map((t, i) => (
-          <div key={`${t.name}-${i}`} className="shrink-0 flex items-center gap-3 opacity-90 hover:opacity-100 transition">
-            <div className="h-8 w-8 rounded-lg bg-[#00A3E0]/20 flex items-center justify-center text-lg">
-              {t.icon || '🛠️'}
+          <div key={`${t.name}-${i}`} className="shrink-0 flex items-center gap-3 opacity-90 hover:opacity-100 transition-all duration-300 group">
+            <div className="h-8 w-8 rounded-lg bg-[#00A3E0]/20 flex items-center justify-center text-lg group-hover:bg-[#00A3E0]/30 group-hover:scale-110 transition-all duration-300">
+              {t.logoSrc ? (
+                <img 
+                  src={t.logoSrc} 
+                  alt={`${t.name} logo`} 
+                  className="w-5 h-5 object-contain"
+                />
+              ) : (
+                t.icon || '🛠️'
+              )}
             </div>
-            <span className="text-sm">{t.name}</span>
+            <span className="text-sm group-hover:text-[#00A3E0] transition-colors duration-300">{t.name}</span>
           </div>
         ))}
       </div>

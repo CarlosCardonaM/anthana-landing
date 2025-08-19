@@ -2,6 +2,9 @@ import Layout from '../components/Layout'
 import Hero from '../components/Hero'
 import ServiceCard from '../components/ServiceCard'
 import ToolsMarquee from '../components/ToolsMarquee'
+import StatsSection from '../components/StatsSection'
+import TeamSection from '../components/TeamSection'
+
 import PortfolioItem from '../components/PortfolioItem'
 import StatsTimeline from '../components/StatsTimeline'
 import ContactForm from '../components/ContactForm'
@@ -47,12 +50,15 @@ const services = [
 ]
 
 const tools = [
-  { name: 'Google Analytics', icon: '📊' },
-  { name: 'Facebook Ads', icon: '📱' },
-  { name: 'Mailchimp', icon: '📧' },
-  { name: 'HubSpot', icon: '🎯' },
-  { name: 'Zapier', icon: '🔗' },
-  { name: 'Canva', icon: '🎨' }
+  { name: 'Adobe Photoshop', logoSrc: '/logos/photoshop.svg' },
+  { name: 'OpenAI', logoSrc: '/logos/openai.svg' },
+  { name: 'Python', logoSrc: '/logos/python.svg' },
+  { name: 'Databricks', logoSrc: '/logos/databricks.svg' },
+  { name: 'Swift', logoSrc: '/logos/swift.svg' },
+  { name: 'LinkedIn', logoSrc: '/logos/linkedin.svg' },
+  { name: 'Canva', logoSrc: '/logos/canva.svg' },
+  { name: 'Google Ads', logoSrc: '/logos/google-ads.svg' },
+  { name: 'Facebook Ads', logoSrc: '/logos/facebook-ads.svg' }
 ]
 
 const portfolio = [
@@ -170,6 +176,9 @@ export default function AnthanaPage() {
     <Layout>
       <Hero />
       
+      {/* Sección de Estadísticas */}
+      <StatsSection />
+      
       {/* Sección Servicios */}
       <section id="servicios" className="max-w-7xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
@@ -238,6 +247,9 @@ export default function AnthanaPage() {
         </div>
       </section>
 
+      {/* Sección del Equipo */}
+      <TeamSection />
+      
       {/* CTA + Formulario de contacto */}
       <section id="contacto" className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-8">

@@ -1,14 +1,35 @@
 import { motion, useReducedMotion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import Logo from './Logo'
 
-const keywords = [
-  { text: 'IA', x: '60%', y: '-40%', delay: 0.4 },
-  { text: 'Marketing', x: '-60%', y: '-40%', delay: 0.8 },
-  { text: 'Automatización', x: '40%', y: '35%', delay: 1.2 },
-  { text: 'Data', x: '-45%', y: '35%', delay: 1.6 },
+
+
+// Partículas flotantes que reaccionan al scroll
+const floatingParticles = [
+  { id: 1, x: '15%', y: '25%', size: 8, color: 'rgba(255,255,255,0.4)' },
+  { id: 2, x: '85%', y: '15%', size: 6, color: 'rgba(0,163,224,0.5)' },
+  { id: 3, x: '25%', y: '75%', size: 10, color: 'rgba(255,255,255,0.35)' },
+  { id: 4, x: '75%', y: '80%', size: 7, color: 'rgba(0,163,224,0.45)' },
+  { id: 5, x: '45%', y: '35%', size: 9, color: 'rgba(255,255,255,0.3)' },
+  { id: 6, x: '90%', y: '60%', size: 5, color: 'rgba(0,163,224,0.4)' },
+  { id: 7, x: '10%', y: '65%', size: 8, color: 'rgba(255,255,255,0.4)' },
+  { id: 8, x: '65%', y: '25%', size: 7, color: 'rgba(0,163,224,0.5)' },
+  { id: 9, x: '35%', y: '85%', size: 6, color: 'rgba(255,255,255,0.35)' },
+  { id: 10, x: '80%', y: '45%', size: 9, color: 'rgba(0,163,224,0.45)' },
 ]
 
 export default function Hero() {
   const prefersReduced = useReducedMotion()
+  const [scrollY, setScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <section id="home" className="relative min-h-[88vh] w-full overflow-hidden flex items-center justify-center">
@@ -24,32 +45,52 @@ export default function Hero() {
         transition={{ duration: 10, repeat: Infinity }}
       />
 
-      {/* Palabras clave flotantes */}
-      {keywords.map((k) => (
-        <motion.span
-          key={k.text}
+      {/* Partículas flotantes que reaccionan al scroll */}
+      {floatingParticles.map((particle) => (
+        <motion.div
+          key={particle.id}
           aria-hidden
-          className="absolute text-white/20 text-2xl md:text-4xl font-semibold select-none"
-          style={{ transform: `translate(${k.x}, ${k.y})` }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={prefersReduced ? { opacity: 0.3 } : { opacity: [0.1, 0.35, 0.15], y: [10, -10, 10] }}
-          transition={{ duration: 6, delay: k.delay, repeat: Infinity }}
-        >
-          {k.text}
-        </motion.span>
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            left: particle.x,
+            top: particle.y,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            backgroundColor: particle.color,
+            transform: `translateY(${scrollY * 0.3}px)`, // Efecto parallax MUCHO más pronunciado
+            boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`, // Glow effect
+          }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={prefersReduced ? { opacity: 0.6 } : { 
+            opacity: [0.4, 1, 0.4], 
+            scale: [0.9, 1.3, 0.9],
+            y: [0, -15, 0],
+            x: [0, 8, 0]
+          }}
+          transition={{ 
+            duration: 4, 
+            delay: particle.id * 0.1, 
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       ))}
+
+
+
+
 
       {/* Contenido central */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <motion.h1
-          className="text-5xl md:text-7xl font-extrabold tracking-tight"
+        <motion.div
+          className="flex justify-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7 }}
         >
-          Anthana
-        </motion.h1>
+          <Logo size="xl" showText={false} />
+        </motion.div>
         <motion.p
           className="mt-4 text-lg md:text-2xl text-white/80"
           initial={{ opacity: 0, y: 20 }}
